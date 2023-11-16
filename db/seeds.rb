@@ -7,3 +7,19 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+Movie.destroy_all
+
+movies_url = "https://tmdb.lewagon.com/movie/top_rated"
+
+post_ids = JSON.parse(RestClient.get(movies_url))
+
+post_ids['results'].each do |result|
+  movie = Movie.new(
+    title: result["title"],
+    overview: result["overview"],
+    poster_url: result["poster_path"],
+    rating: result["vote_average"]
+  )
+  movie.save
+
+end
